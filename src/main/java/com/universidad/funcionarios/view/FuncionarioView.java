@@ -135,6 +135,10 @@ public class FuncionarioView extends JFrame {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(table);
+        table.removeColumn(table.getColumnModel().getColumn(12));
+        table.removeColumn(table.getColumnModel().getColumn(10));
+        table.removeColumn(table.getColumnModel().getColumn(1));
+        table.removeColumn(table.getColumnModel().getColumn(0)); 
         scrollPane.setBorder(BorderFactory.createTitledBorder("Listado de funcionarios"));
 
         JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
