@@ -9,6 +9,7 @@ import com.universidad.funcionarios.model.Funcionario;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,13 +39,21 @@ public class FuncionarioView extends JFrame {
     private JTable table;
     private DefaultTableModel tableModel;
 
+    private final Color backgroundColor = new Color(245, 247, 250);
+    private final Color panelColor = Color.WHITE;
+    private final Color primaryColor = new Color(37, 99, 235);
+    private final Color neutralColor = new Color(100, 116, 139);
+    private final Color dangerColor = new Color(220, 38, 38);
+    private final Color textColor = new Color(45, 55, 72);
+
     public FuncionarioView() {
         dateFormat.setLenient(false);
 
-        setTitle("CRUD Funcionarios");
-        setSize(1250, 650);
+        setTitle("Gestión de Funcionarios");
+        setSize(1280, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        getContentPane().setBackground(backgroundColor);
 
         initComponents();
         cargarCombos();
@@ -52,66 +61,161 @@ public class FuncionarioView extends JFrame {
     }
 
     private void initComponents() {
-        JPanel panelForm = new JPanel(new GridLayout(11, 2, 5, 5));
-        panelForm.setBorder(BorderFactory.createTitledBorder("Datos del funcionario"));
+        setLayout(new BorderLayout(15, 15));
 
-        txtId = new JTextField();
+        JPanel headerPanel = crearHeader();
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBackground(backgroundColor);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 20, 20));
+
+        JPanel formContainer = crearFormulario();
+        JPanel tableContainer = crearTabla();
+
+        mainPanel.add(formContainer, BorderLayout.WEST);
+        mainPanel.add(tableContainer, BorderLayout.CENTER);
+
+        add(headerPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel crearHeader() {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(primaryColor);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(18, 25, 18, 25));
+
+        JLabel title = new JLabel("Gestión de Funcionarios");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Segoe UI", Font.BOLD, 24));
+
+        JLabel subtitle = new JLabel("CRUD para administrar funcionarios de la universidad");
+        subtitle.setForeground(new Color(225, 232, 255));
+        subtitle.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+        JPanel textPanel = new JPanel(new GridLayout(2, 1));
+        textPanel.setOpaque(false);
+        textPanel.add(title);
+        textPanel.add(subtitle);
+
+        headerPanel.add(textPanel, BorderLayout.WEST);
+
+        return headerPanel;
+    }
+
+    private JPanel crearFormulario() {
+        JPanel container = new JPanel(new BorderLayout(10, 10));
+        container.setPreferredSize(new Dimension(460, 0));
+        container.setBackground(panelColor);
+        container.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(225, 230, 235)),
+                BorderFactory.createEmptyBorder(18, 18, 18, 18)
+        ));
+
+        JLabel formTitle = new JLabel("Datos del funcionario");
+        formTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        formTitle.setForeground(textColor);
+        formTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+
+        JPanel panelForm = new JPanel(new GridBagLayout());
+        panelForm.setBackground(panelColor);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(6, 6, 6, 6);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        txtId = crearTextField();
         txtId.setEditable(false);
 
-        cmbTipoDocumento = new JComboBox<>();
-        txtNumeroDocumento = new JTextField();
-        txtNombres = new JTextField();
-        txtApellidos = new JTextField();
-        txtFechaNacimiento = new JTextField();
-        txtDireccion = new JTextField();
-        txtTelefono = new JTextField();
-        txtCorreo = new JTextField();
-        cmbEstadoCivil = new JComboBox<>();
-        cmbFormacionAcademica = new JComboBox<>();
+        cmbTipoDocumento = crearComboBox();
+        txtNumeroDocumento = crearTextField();
+        txtNombres = crearTextField();
+        txtApellidos = crearTextField();
+        txtFechaNacimiento = crearTextField();
+        txtDireccion = crearTextField();
+        txtTelefono = crearTextField();
+        txtCorreo = crearTextField();
+        cmbEstadoCivil = crearComboBox();
+        cmbFormacionAcademica = crearComboBox();
 
-        panelForm.add(new JLabel("ID:"));
-        panelForm.add(txtId);
+        agregarCampoGrid(panelForm, gbc, 0, "ID:", txtId);
+        agregarCampoGrid(panelForm, gbc, 1, "Tipo Documento *:", cmbTipoDocumento);
+        agregarCampoGrid(panelForm, gbc, 2, "Número Documento *:", txtNumeroDocumento);
+        agregarCampoGrid(panelForm, gbc, 3, "Nombres *:", txtNombres);
+        agregarCampoGrid(panelForm, gbc, 4, "Apellidos *:", txtApellidos);
+        agregarCampoGrid(panelForm, gbc, 5, "Fecha Nacimiento *:", txtFechaNacimiento);
+        agregarCampoGrid(panelForm, gbc, 6, "Dirección:", txtDireccion);
+        agregarCampoGrid(panelForm, gbc, 7, "Teléfono:", txtTelefono);
+        agregarCampoGrid(panelForm, gbc, 8, "Correo:", txtCorreo);
+        agregarCampoGrid(panelForm, gbc, 9, "Estado Civil *:", cmbEstadoCivil);
+        agregarCampoGrid(panelForm, gbc, 10, "Formación Académica *:", cmbFormacionAcademica);
 
-        panelForm.add(new JLabel("Tipo Documento *:"));
-        panelForm.add(cmbTipoDocumento);
+        JButton btnCrear = crearBoton("Crear", primaryColor);
+        JButton btnActualizar = crearBoton("Actualizar", primaryColor);
+        JButton btnEliminar = crearBoton("Eliminar", dangerColor);
+        JButton btnLimpiar = crearBoton("Limpiar", neutralColor);
 
-        panelForm.add(new JLabel("Número Documento *:"));
-        panelForm.add(txtNumeroDocumento);
-
-        panelForm.add(new JLabel("Nombres *:"));
-        panelForm.add(txtNombres);
-
-        panelForm.add(new JLabel("Apellidos *:"));
-        panelForm.add(txtApellidos);
-
-        panelForm.add(new JLabel("Fecha Nacimiento * (yyyy-MM-dd):"));
-        panelForm.add(txtFechaNacimiento);
-
-        panelForm.add(new JLabel("Dirección:"));
-        panelForm.add(txtDireccion);
-
-        panelForm.add(new JLabel("Teléfono:"));
-        panelForm.add(txtTelefono);
-
-        panelForm.add(new JLabel("Correo:"));
-        panelForm.add(txtCorreo);
-
-        panelForm.add(new JLabel("Estado Civil *:"));
-        panelForm.add(cmbEstadoCivil);
-
-        panelForm.add(new JLabel("Formación Académica *:"));
-        panelForm.add(cmbFormacionAcademica);
-
-        JButton btnCrear = new JButton("Crear");
-        JButton btnActualizar = new JButton("Actualizar");
-        JButton btnEliminar = new JButton("Eliminar");
-        JButton btnLimpiar = new JButton("Limpiar");
-
-        JPanel panelButtons = new JPanel();
+        JPanel panelButtons = new JPanel(new GridLayout(2, 2, 10, 10));
+        panelButtons.setBackground(panelColor);
+        panelButtons.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
         panelButtons.add(btnCrear);
         panelButtons.add(btnActualizar);
         panelButtons.add(btnEliminar);
         panelButtons.add(btnLimpiar);
+
+        JLabel hint = new JLabel("Formato fecha: yyyy-MM-dd");
+        hint.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        hint.setForeground(new Color(100, 116, 139));
+        hint.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBackground(panelColor);
+        bottomPanel.add(panelButtons, BorderLayout.CENTER);
+        bottomPanel.add(hint, BorderLayout.SOUTH);
+
+        JScrollPane formScrollPane = new JScrollPane(panelForm);
+        formScrollPane.setBorder(null);
+        formScrollPane.setBackground(panelColor);
+        formScrollPane.getViewport().setBackground(panelColor);
+        formScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        formScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        container.add(formTitle, BorderLayout.NORTH);
+        container.add(formScrollPane, BorderLayout.CENTER);
+        container.add(bottomPanel, BorderLayout.SOUTH);
+
+        btnCrear.addActionListener(e -> crearFuncionario());
+        btnActualizar.addActionListener(e -> actualizarFuncionario());
+        btnEliminar.addActionListener(e -> eliminarFuncionario());
+        btnLimpiar.addActionListener(e -> limpiarFormulario());
+
+        return container;
+    }
+
+    private void agregarCampoGrid(JPanel panel, GridBagConstraints gbc, int row, String label, Component component) {
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        gbc.weightx = 0.35;
+
+        JLabel lbl = crearLabel(label);
+        panel.add(lbl, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = row;
+        gbc.weightx = 0.65;
+
+        panel.add(component, gbc);
+    }
+
+    private JPanel crearTabla() {
+        JPanel container = new JPanel(new BorderLayout(10, 10));
+        container.setBackground(panelColor);
+        container.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(225, 230, 235)),
+                BorderFactory.createEmptyBorder(18, 18, 18, 18)
+        ));
+
+        JLabel tableTitle = new JLabel("Listado de funcionarios");
+        tableTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        tableTitle.setForeground(textColor);
 
         tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{
@@ -133,31 +237,80 @@ public class FuncionarioView extends JFrame {
 
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setRowHeight(28);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        table.setGridColor(new Color(230, 235, 240));
+        table.setSelectionBackground(new Color(219, 234, 254));
+        table.setSelectionForeground(textColor);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        JTableHeader header = table.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        header.setBackground(new Color(235, 240, 245));
+        header.setForeground(textColor);
+        header.setPreferredSize(new Dimension(header.getWidth(), 34));
 
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(225, 230, 235)));
+
         table.removeColumn(table.getColumnModel().getColumn(12));
         table.removeColumn(table.getColumnModel().getColumn(10));
         table.removeColumn(table.getColumnModel().getColumn(1));
-        table.removeColumn(table.getColumnModel().getColumn(0)); 
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Listado de funcionarios"));
-
-        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
-        leftPanel.add(panelForm, BorderLayout.CENTER);
-        leftPanel.add(panelButtons, BorderLayout.SOUTH);
-
-        add(leftPanel, BorderLayout.WEST);
-        add(scrollPane, BorderLayout.CENTER);
-
-        btnCrear.addActionListener(e -> crearFuncionario());
-        btnActualizar.addActionListener(e -> actualizarFuncionario());
-        btnEliminar.addActionListener(e -> eliminarFuncionario());
-        btnLimpiar.addActionListener(e -> limpiarFormulario());
+        table.removeColumn(table.getColumnModel().getColumn(0));
 
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 seleccionarFuncionario();
             }
         });
+
+        container.add(tableTitle, BorderLayout.NORTH);
+        container.add(scrollPane, BorderLayout.CENTER);
+
+        return container;
+    }
+
+    private JTextField crearTextField() {
+        JTextField field = new JTextField();
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        field.setPreferredSize(new Dimension(230, 36));
+        field.setMinimumSize(new Dimension(230, 36));
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(203, 213, 225)),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        return field;
+    }
+
+    private JComboBox<ComboItem> crearComboBox() {
+        JComboBox<ComboItem> combo = new JComboBox<>();
+        combo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        combo.setPreferredSize(new Dimension(230, 36));
+        combo.setMinimumSize(new Dimension(230, 36));
+        combo.setBackground(Color.WHITE);
+        return combo;
+    }
+
+    private JLabel crearLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        label.setForeground(textColor);
+        return label;
+    }
+
+    private void agregarCampo(JPanel panel, String label, Component component) {
+        panel.add(crearLabel(label));
+        panel.add(component);
+    }
+
+    private JButton crearBoton(String text, Color color) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        button.setBackground(color);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(9, 12, 9, 12));
+        return button;
     }
 
     private void cargarCombos() {
@@ -324,17 +477,19 @@ public class FuncionarioView extends JFrame {
         int row = table.getSelectedRow();
 
         if (row >= 0) {
-            txtId.setText(getTableValue(row, 0));
-            seleccionarCombo(cmbTipoDocumento, Integer.parseInt(getTableValue(row, 1)));
-            txtNumeroDocumento.setText(getTableValue(row, 3));
-            txtNombres.setText(getTableValue(row, 4));
-            txtApellidos.setText(getTableValue(row, 5));
-            txtFechaNacimiento.setText(getTableValue(row, 6));
-            txtDireccion.setText(getTableValue(row, 7));
-            txtTelefono.setText(getTableValue(row, 8));
-            txtCorreo.setText(getTableValue(row, 9));
-            seleccionarCombo(cmbEstadoCivil, Integer.parseInt(getTableValue(row, 10)));
-            seleccionarCombo(cmbFormacionAcademica, Integer.parseInt(getTableValue(row, 12)));
+            int modelRow = table.convertRowIndexToModel(row);
+
+            txtId.setText(getTableValue(modelRow, 0));
+            seleccionarCombo(cmbTipoDocumento, Integer.parseInt(getTableValue(modelRow, 1)));
+            txtNumeroDocumento.setText(getTableValue(modelRow, 3));
+            txtNombres.setText(getTableValue(modelRow, 4));
+            txtApellidos.setText(getTableValue(modelRow, 5));
+            txtFechaNacimiento.setText(getTableValue(modelRow, 6));
+            txtDireccion.setText(getTableValue(modelRow, 7));
+            txtTelefono.setText(getTableValue(modelRow, 8));
+            txtCorreo.setText(getTableValue(modelRow, 9));
+            seleccionarCombo(cmbEstadoCivil, Integer.parseInt(getTableValue(modelRow, 10)));
+            seleccionarCombo(cmbFormacionAcademica, Integer.parseInt(getTableValue(modelRow, 12)));
         }
     }
 

@@ -1,4 +1,3 @@
-com\universidad\funcionarios\service\FuncionarioService.class
 com\universidad\funcionarios\config\DatabaseConnection.class
 com\universidad\funcionarios\Main.class
 com\universidad\funcionarios\exception\DAOException.class
