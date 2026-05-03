@@ -1,9 +1,9 @@
 package com.universidad.funcionarios.dao;
 
-import com.universidad.funcionarios.model.Funcionario;
-import com.universidad.funcionarios.exception.DAOException;
-
 import java.util.List;
+
+import com.universidad.funcionarios.exception.DAOException;
+import com.universidad.funcionarios.model.Funcionario;
 
 public interface FuncionarioDAO {
 

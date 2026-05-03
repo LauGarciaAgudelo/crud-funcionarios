@@ -6,6 +6,7 @@ public class Funcionario {
 
     private int id;
     private int tipoDocumentoId;
+    private String tipoDocumentoNombre;
     private String numeroDocumento;
     private String nombres;
     private String apellidos;
@@ -14,9 +15,12 @@ public class Funcionario {
     private String telefono;
     private String correo;
     private int estadoCivilId;
+    private String estadoCivilNombre;
     private int formacionAcademicaId;
+    private String formacionAcademicaNombre;
 
-    public Funcionario() {}
+    public Funcionario() {
+    }
 
     public Funcionario(int id, int tipoDocumentoId, String numeroDocumento, String nombres,
                        String apellidos, Date fechaNacimiento, String direccion,
@@ -35,38 +39,116 @@ public class Funcionario {
         this.formacionAcademicaId = formacionAcademicaId;
     }
 
-    // Getters y Setters
+    public int getId() {
+        return id;
+    }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getTipoDocumentoId() { return tipoDocumentoId; }
-    public void setTipoDocumentoId(int tipoDocumentoId) { this.tipoDocumentoId = tipoDocumentoId; }
 
-    public String getNumeroDocumento() { return numeroDocumento; }
-    public void setNumeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; }
+    public int getTipoDocumentoId() {
+        return tipoDocumentoId;
+    }
 
-    public String getNombres() { return nombres; }
-    public void setNombres(String nombres) { this.nombres = nombres; }
+    public void setTipoDocumentoId(int tipoDocumentoId) {
+        this.tipoDocumentoId = tipoDocumentoId;
+    }
 
-    public String getApellidos() { return apellidos; }
-    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
+    public String getTipoDocumentoNombre() {
+        return tipoDocumentoNombre;
+    }
 
-    public Date getFechaNacimiento() { return fechaNacimiento; }
-    public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+    public void setTipoDocumentoNombre(String tipoDocumentoNombre) {
+        this.tipoDocumentoNombre = tipoDocumentoNombre;
+    }
 
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
 
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
+    }
 
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
+    public String getNombres() {
+        return nombres;
+    }
 
-    public int getEstadoCivilId() { return estadoCivilId; }
-    public void setEstadoCivilId(int estadoCivilId) { this.estadoCivilId = estadoCivilId; }
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
 
-    public int getFormacionAcademicaId() { return formacionAcademicaId; }
-    public void setFormacionAcademicaId(int formacionAcademicaId) { this.formacionAcademicaId = formacionAcademicaId; }
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public int getEstadoCivilId() {
+        return estadoCivilId;
+    }
+
+    public void setEstadoCivilId(int estadoCivilId) {
+        this.estadoCivilId = estadoCivilId;
+    }
+
+    public String getEstadoCivilNombre() {
+        return estadoCivilNombre;
+    }
+
+    public void setEstadoCivilNombre(String estadoCivilNombre) {
+        this.estadoCivilNombre = estadoCivilNombre;
+    }
+
+    public int getFormacionAcademicaId() {
+        return formacionAcademicaId;
+    }
+
+    public void setFormacionAcademicaId(int formacionAcademicaId) {
+        this.formacionAcademicaId = formacionAcademicaId;
+    }
+
+    public String getFormacionAcademicaNombre() {
+        return formacionAcademicaNombre;
+    }
+
+    public void setFormacionAcademicaNombre(String formacionAcademicaNombre) {
+        this.formacionAcademicaNombre = formacionAcademicaNombre;
+    }
 }

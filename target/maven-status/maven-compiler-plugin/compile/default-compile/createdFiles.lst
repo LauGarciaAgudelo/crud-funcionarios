@@ -5,5 +5,6 @@ com\universidad\funcionarios\exception\DAOException.class
 com\universidad\App.class
 com\universidad\funcionarios\dao\FuncionarioDAOImpl.class
 com\universidad\funcionarios\model\Funcionario.class
-main\java\com\universidad\funcionarios\view\FuncionarioView.class
+com\universidad\funcionarios\view\FuncionarioView.class
 com\universidad\funcionarios\dao\FuncionarioDAO.class
+com\universidad\funcionarios\model\ComboItem.class
