@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CRUD Funcionarios - Java
 
 ## Descripción
@@ -23,3 +24,7 @@ Scripts incluidos en carpeta /database
 
 ## Autor
 Laura Garcia
+=======
+# crud-funcionarios
+Repositorio de código creado para construir el CRUD de funcionarios y las operaciones que sean necesarias. 
+>>>>>>> 6969a99ea6d3c07ef0c9bb00fb540152767d406e
